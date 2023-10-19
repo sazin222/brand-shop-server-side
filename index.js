@@ -44,6 +44,34 @@ async function run() {
     const product = await coursor.toArray() 
     res.send(product)
  })
+  
+ app.get('/product/:id', async(req,res)=>{
+  const id = req.params.id 
+  const query ={ _id: new ObjectId(id) }
+  const result = await userCollection.findOne(query)
+  res.send(result)
+})
+
+ 
+ app.put('/product/:id', async(req,res)=>{
+  const id = req.params.id
+  const filter ={_id: new ObjectId(id) }
+  const UpdateProduct= req.body
+  const options = { upsert: true };
+  const Product= {
+    $set:{
+      image: UpdateProduct.image,
+      name : UpdateProduct.name ,
+      brandname: UpdateProduct.brandname,
+      type: UpdateProduct.type,
+      price: UpdateProduct.price,
+      description: UpdateProduct.description,
+      rating : UpdateProduct.rating
+    }
+  }
+  const result = await userCollection.updateOne(filter,Product,options) 
+  res.send(result)
+})
 
  
  app.delete('/product/:id', async (req,res)=>{

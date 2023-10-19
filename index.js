@@ -44,9 +44,27 @@ async function run() {
     const product = await coursor.toArray() 
     res.send(product)
  })
+
+ 
+ app.get('/products/:brand', async(req,res)=>{
+  const brand = req.params.brand 
+  const query ={ brandname: brand}
+  const coursor= userCollection.find(query)
+  const result = await coursor.toArray()
+  res.send(result)
+})
   
  app.get('/product/:id', async(req,res)=>{
   const id = req.params.id 
+  console.log(id);
+  const query ={ _id: new ObjectId(id) }
+  const result = await userCollection.findOne(query)
+  res.send(result)
+})
+  
+ app.get('/productbrand/:id', async(req,res)=>{
+  const id = req.params.id 
+  console.log(id);
   const query ={ _id: new ObjectId(id) }
   const result = await userCollection.findOne(query)
   res.send(result)
@@ -55,6 +73,7 @@ async function run() {
  
  app.put('/product/:id', async(req,res)=>{
   const id = req.params.id
+  console.log(id);
   const filter ={_id: new ObjectId(id) }
   const UpdateProduct= req.body
   const options = { upsert: true };
